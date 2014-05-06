@@ -74,6 +74,15 @@ class   Vue():
 	def miseajour(self,modele):
 		self.canevas.delete(ALL)
 		j=modele.carre
+		self.canevas.create_rectangle(0, 0, self.controleur.m.largeurBordure, self.controleur.m.hauteur, fill="black")
+		self.canevas.create_rectangle(0, self.controleur.m.hauteur-self.controleur.m.largeurBordure, self.controleur.m.largeur, self.controleur.m.hauteur, fill="black")
+		self.canevas.create_rectangle(0, 0, self.controleur.m.largeur, self.controleur.m.largeurBordure, fill="black")
+		self.canevas.create_rectangle(self.controleur.m.largeur-self.controleur.m.largeurBordure, 0, self.controleur.m.largeur, self.controleur.m.hauteur, fill="black")
+		self.canevas.create_rectangle(j.x1,j.y1,j.x2,j.y2,fill="red",   tags=("carre"))
+		self.canevas.addtag_overlapping("dessus",j.x1, j.y1, j.x2, j.y2)
+		lestags=self.canevas.gettags("dessus")
+		if "pion" in lestags:
+			tkinter.messagebox.showinfo("Oh non!", "Vous etes mort...")
 		if  j.x1 <= self.controleur.m.largeurBordure:
 			#j.x1 = self.controleur.m.largeurBordure
 			#j.x2 = self.controleur.m.largeurBordure+self.controleur.m.grandeurCarre
@@ -98,12 +107,7 @@ class   Vue():
 			tkinter.messagebox.showinfo("Oh non!", "Vous etes mort...")
 			self.root.destroy()
 			os._exit(1)
-			
-		self.canevas.create_rectangle(0, 0, self.controleur.m.largeurBordure, self.controleur.m.hauteur, fill="black")
-		self.canevas.create_rectangle(0, self.controleur.m.hauteur-self.controleur.m.largeurBordure, self.controleur.m.largeur, self.controleur.m.hauteur, fill="black")
-		self.canevas.create_rectangle(0, 0, self.controleur.m.largeur, self.controleur.m.largeurBordure, fill="black")
-		self.canevas.create_rectangle(self.controleur.m.largeur-self.controleur.m.largeurBordure, 0, self.controleur.m.largeur, self.controleur.m.hauteur, fill="black")
-		self.canevas.create_rectangle(j.x1,j.y1,j.x2,j.y2,fill="red",   tags=("carre"))
+		
 		
 		
 if  __name__    ==  '__main__':
