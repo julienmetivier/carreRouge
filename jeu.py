@@ -87,15 +87,15 @@ class   Modele():
 	def __init__(self,  parent):
 		self.controleur =   parent
 		self.refreshRate = 10
-		self.largeur = 450
-		self.hauteur = self.largeur
+		self.largeur = 1200
+		self.hauteur = 450
 		self.grandeurCarre = 30
 		self.largeurBordure = 50
 		self.pions = []
 		self.carre=Carre(self)
 		self.creerPions()
 	
-	def carrebouge(self,x,y):
+	def carreBouge(self,x,y):
 		self.carre.bouge(x,y)
 
 	def creerPions(self):
@@ -122,7 +122,7 @@ class   Controleur():
 		self.v.miseajour(self.m)
 		self.v.root.mainloop()
 		
-	def carrebouge(self,x,y):
+	def carreBouge(self,x,y):
 		self.m.carre.bouge(x,y)
 		
 	def debutPartie(self):
@@ -134,28 +134,43 @@ class   Vue():
 	def __init__(self,  parent):
 		self.controleur =   parent
 		self.root   =   Tk()
-		self.carrebouge=0
+		self.carreBouge=0
 		self.root.wm_title("Carre Rouge")
+		self.initMenu()
+
+	def initMenu(self):
+		self.initPartie()
+
+	def initHighScore(self):
+		pass
+
+	def initOptions(self):
+		pass
+
+	def fermerTout(self):
+		self.root.destroy()
+		os._exit(1)
+		
+	def initPartie(self):
 		self.canevas=Canvas(self.root,width=self.controleur.m.largeur,height=self.controleur.m.hauteur,bg="grey")
 		self.canevas.pack()
 		self.canevas.bind("<Button-1>",self.click)
 		self.canevas.bind("<ButtonRelease>",self.relacherClick)
 		self.canevas.bind("<Motion>",self.bouge)
 		
-		
 	def bouge(self,evt):
-		if  self.carrebouge:
-			self.controleur.carrebouge(evt.x,evt.y)
+		if  self.carreBouge:
+			self.controleur.carreBouge(evt.x,evt.y)
 		
 	def click(self,evt):
 		lestags=self.canevas.gettags("current")
 		if  "carre" in  lestags:
-			self.carrebouge=1
+			self.carreBouge=1
 			self.controleur.actif = 1
 			self.controleur.debutPartie()
 			
 	def relacherClick(self,evt):
-		self.carrebouge=0
+		self.carreBouge=0
 		
 	def miseajour(self,modele):
 		self.canevas.delete(ALL)
@@ -171,7 +186,6 @@ class   Vue():
 		self.canevas.create_rectangle(j.x1,j.y1,j.x2,j.y2,fill="red",   tags=("carre"))
 		self.canevas.addtag_overlapping("dessus",j.x1, j.y1, j.x2, j.y2)
 		lestags=self.canevas.gettags("dessus")
-		print(lestags)
 		if "pion" in lestags:
 			tkinter.messagebox.showinfo("Oh non!", "Vous etes mort...")
 			#tkMessageBox.showinfo("Oh non!", "Vous etes mort...")
