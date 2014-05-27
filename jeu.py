@@ -3,6 +3,8 @@ import tkinter.messagebox
 #import tkMessageBox
 import os
 import random
+from helper import *
+import time
 
 class   Carre():
 	def __init__(self,parent):
@@ -26,144 +28,61 @@ class Pion():
 		self.x2=None
 		self.y1=None
 		self.y2=None
-		self.cible=None
+		self.xC=None
+		self.yC=None
+		self.angle=None
+		self.vitesse = 7
+		self.nombreCoup = 0
+		self.cible=[0,0]
 		self.positionInitiale(x,y)
 		
 	def positionInitiale(self,x,y):
+		self.xC = x
+		self.yC = y
 		if self.num == 0:
-			self.x1=x-15
-			self.x2=x+15
-			self.y1=y-35
-			self.y2=y+35
+			self.x1=self.xC-15
+			self.x2=self.xC+15
+			self.y1=self.yC-35
+			self.y2=self.yC+35
 		elif self.num == 1:
-			self.x1=x-35
-			self.x2=x+35
-			self.y1=y-12
-			self.y2=y+12
+			self.x1=self.xC-35
+			self.x2=self.xC+35
+			self.y1=self.yC-12
+			self.y2=self.yC+12
 		elif self.num == 2:
-			self.x1=x-15
-			self.x2=x+15
-			self.y1=y-25
-			self.y2=y+25
+			self.x1=self.xC-15
+			self.x2=self.xC+15
+			self.y1=self.yC-25
+			self.y2=self.yC+25
 		elif self.num == 3:
-			self.x1=x-20
-			self.x2=x+20
+			self.x1=self.xC-20
+			self.x2=self.xC+20
 			self.y1=y-20
 			self.y2=y+20
 
 	def bouge(self):
-		blup = None
-		if self.cible != None:
-			if (self.x2-self.x1)/2 == self.cible[0] and (self.y2-self.y1)/2 == self.cible[1]:
-				blup = True
-			else:
-				blup = False
-		if blup == True or self.cible == None:
-			if self.num == 0:
-				if self.parent.nombreCoup%4 == 0:
-					deplacementX = 1
-					deplacementY = 1
-					x=(self.parent.largeur - 15)*deplacementX
-					y=random.randrange(self.parent.hauteur)*deplacementY
-				elif self.parent.nombreCoup%4 == 1:
-					deplacementX = 1
-					deplacementY = -1
-					x=100
-					y=100
-				elif self.parent.nombreCoup%4 == 2:
-					deplacementX = -1
-					deplacementY = -1
-					x=100
-					y=100
-				elif self.parent.nombreCoup%4 == 3:
-					deplacementX = -1
-					deplacementY = 1
-					x=100
-					y=100
-			elif self.num == 1:
-				if self.parent.nombreCoup%4 == 0:
-					deplacementX = -1
-					deplacementY = 1
-					x=100
-					y=100
-				elif self.parent.nombreCoup%4 == 1:
-					deplacementX = -1
-					deplacementY = -1
-					x=100
-					y=100
-				elif self.parent.nombreCoup%4 == 2:
-					deplacementX = 1
-					deplacementY = -1
-					x=100
-					y=100
-				elif self.parent.nombreCoup%4 == 3:
-					deplacementX = 1
-					deplacementY = 1
-					x=100
-					y=100
-			elif self.num == 2:
-				if self.parent.nombreCoup%4 == 0:
-					deplacementX = -1
-					deplacementY = -1
-					x=100
-					y=100
-				elif self.parent.nombreCoup%4 == 1:
-					deplacementX = -1
-					deplacementY = 1
-					x=100
-					y=100
-				elif self.parent.nombreCoup%4 == 2:
-					deplacementX = 1
-					deplacementY = 1
-					x=100
-					y=100
-				elif self.parent.nombreCoup%4 == 3:
-					deplacementX = 1
-					deplacementY = -1
-					x=100
-					y=100
-			elif self.num == 3:
-				if self.parent.nombreCoup%4 == 0:
-					deplacementX = 1
-					deplacementY = -1
-					x=100
-					y=100
-				elif self.parent.nombreCoup%4 == 1:
-					deplacementX = 1
-					deplacementY = 1
-					x=100
-					y=100
-				elif self.parent.nombreCoup%4 == 2:
-					deplacementX = -1
-					deplacementY = 1
-					x=100
-					y=100
-				elif self.parent.nombreCoup%4 == 3:
-					deplacementX = -1
-					deplacementY = -1
-					x=100
-					y=100
-		
-		if self.num == 0:
-			self.x1=x-15
-			self.x2=x+15
-			self.y1=y-35
-			self.y2=y+35
-		elif self.num == 1:
-			self.x1=x-35
-			self.x2=x+35
-			self.y1=y-12
-			self.y2=y+12
-		elif self.num == 2:
-			self.x1=x-15
-			self.x2=x+15
-			self.y1=y-25
-			self.y2=y+25
-		elif self.num == 3:
-			self.x1=x-20
-			self.x2=x+20
-			self.y1=y-20
-			self.y2=y+20
+		if self.x1 <= 0 or self.x2 >= self.parent.largeur or self.y1 <= 0 or self.y2 >= self.parent.hauteur or self.parent.nombreCoup == 1:
+			self.nombreCoup += random.randrange(4)
+			if (self.nombreCoup%4) == 0:
+				self.cible[0] =  (random.randrange(self.parent.largeur))
+				self.cible[1] =  (self.parent.hauteur)
+				print(self.cible)
+				self.angle = Helper.calcAngle( (self.xC),  (self.yC),  (self.cible[0]),  (self.cible[1]))
+			elif (self.nombreCoup%4) == 1:
+				self.cible[0] =  (self.parent.largeur)
+				self.cible[1] =  (random.randrange(self.parent.hauteur))
+				self.angle = Helper.calcAngle( (self.xC),  (self.yC),  (self.cible[0]),  (self.cible[1]))
+			elif (self.nombreCoup%4) == 2:
+				self.cible[0] =  random.randrange(self.parent.largeur)
+				self.cible[1] =  0
+				self.angle = Helper.calcAngle( (self.xC),  (self.yC),  (self.cible[0]),  (self.cible[1]))
+			elif (self.nombreCoup%4) == 3:
+				self.cible[0] =  0
+				self.cible[1] =  random.randrange(self.parent.hauteur)
+				self.angle = Helper.calcAngle( (self.xC),  (self.yC),  (self.cible[0]),  (self.cible[1]))
+			
+		nouvX,nouvY = Helper.getAngledPoint(self.angle,self.vitesse,self.xC,self.yC)
+		self.positionInitiale(nouvX, nouvY)
 		pass
 
 class   Modele():
@@ -177,8 +96,9 @@ class   Modele():
 		self.pions = []
 		self.carre=Carre(self)
 		self.creerPions()
-		self.vitesse = 1
 		self.nombreCoup = 0
+		self.debutTime = 0
+		self.finTime = 0
 	
 	def carreBouge(self,x,y):
 		self.carre.bouge(x,y)
@@ -250,15 +170,14 @@ class   Vue():
 	def initHighScore(self):
 		pass
 
-	def initOptions(self):
-		pass
-
 	def fermerTout(self):
 		self.root.destroy()
 		os._exit(1)
 		
 	def mortSubite(self):
-		tkinter.messagebox.showinfo("Oh non!", "Vous etes mort...")
+		self.controleur.m.finTime = time.time()
+		duree = self.controleur.m.finTime-self.controleur.m.debutTime
+		tkinter.messagebox.showinfo("Oh non!", "Vous etes mort avec un temps de : "+str(format(duree, '.2f'))+" secondes.")
 		#tkMessageBox.showinfo("Oh non!", "Vous etes mort...")
 		self.fermerTout()
 		
@@ -268,6 +187,18 @@ class   Vue():
 		self.canevas.bind("<Button-1>",self.click)
 		self.canevas.bind("<ButtonRelease>",self.relacherClick)
 		self.canevas.bind("<Motion>",self.bouge)
+		b = Button(self.root,text="Jouer Facile")
+		b.pack(side=LEFT)	
+		b = Button(self.root, text="Jouer Intermediaire")
+		b.pack(side=LEFT)   
+		b = Button(self.root, text="Jouer Difficile")
+		b.pack(side=LEFT)   
+		b = Button(self.root, text="Jouer Progressif")
+		b.pack(side=LEFT)
+		b = Button(self.root, text="High Scores")
+		b.pack(side=LEFT)	   
+		b = Button(self.root, text="Quitter", command=self.fermerTout)
+		b.pack(side=LEFT) 
 		
 	def bouge(self,evt):
 		if  self.carreBouge:
@@ -278,7 +209,9 @@ class   Vue():
 		if  "carre" in  lestags:
 			self.carreBouge=1
 			self.controleur.actif = 1
-			self.controleur.debutPartie()
+			if self.controleur.m.nombreCoup == 1:
+				self.controleur.debutPartie()
+				self.controleur.m.debutTime = time.time()
 			
 	def relacherClick(self,evt):
 		self.carreBouge=0
